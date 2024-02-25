@@ -16,15 +16,6 @@ umi.use(mplTokenMetadata())
 const mint = generateSigner(umi);
 
 (async () => {
-    // let prop: CreateV1InstructionDataArgs = {
-    //     name: "MyFirstRug",
-    //     symbol: "MFR",
-    //     uri: "https://arweave.net/pXn0ramJeX20dhpvyhf7Ko9Gv5sFtMjuttVt4PnI-Pk",
-    //     sellerFeeBasisPoints: percentAmount(4),
-    //     creators: null,
-    //     tokenStandard: 0,
-    //     };
-    // let tx = await createNft(umi, );
 
     let tx = await createNft(umi, {
         mint,
