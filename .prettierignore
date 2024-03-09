@@ -1,11 +1,8 @@
 
-keypair.json
 .anchor
 .DS_Store
 target
-**/*.rs.bk
 node_modules
+dist
+build
 test-ledger
-.yarn
-Cargo.lock
-Cargo.toml
