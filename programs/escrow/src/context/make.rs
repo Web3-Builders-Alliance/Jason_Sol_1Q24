@@ -43,7 +43,7 @@ impl<'info> Make<'info> {
     pub fn make(&mut self, amount: u64, bumps: &MakeBumps) -> Result<()> {
         self.escrow.mint = self.mint.key();
         self.escrow.target = amount;
-        self.escrow.bump = bumps;
+        self.escrow.bump = bumps.escrow;
 
         msg!("Escrow account created");
         msg!("Escrow Mint: {:?}", self.escrow.mint);
