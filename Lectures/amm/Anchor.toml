@@ -12,7 +12,7 @@ url = "https://api.apr.dev"
 
 [provider]
 cluster = "Localnet"
-wallet = "/home/vboxuser/.config/solana/id.json"
+wallet = "/home/vboxuser/Desktop/keypair.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

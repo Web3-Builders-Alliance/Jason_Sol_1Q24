@@ -1,4 +1,3 @@
-pub mod constants;
 pub mod helpers;
 pub mod error;
 pub mod instructions;
@@ -6,7 +5,6 @@ pub mod state;
 
 use anchor_lang::prelude::*;
 
-pub use constants::*;
 pub use instructions::*;
 pub use state::*;
 
@@ -55,5 +53,16 @@ pub mod amm {
         ctx.accounts.swap(is_x, amount, min, expiration)
     }
 
+    pub fn lock(
+        ctx: Context<Update>
+    ) -> Result<()> {
+        ctx.accounts.lock()
+    }
+
+    pub fn unlock(
+        ctx: Context<Update>
+    ) -> Result<()> {
+        ctx.accounts.unlock()
+    }
 
 }
