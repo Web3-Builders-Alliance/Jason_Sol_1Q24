@@ -1,5 +1,4 @@
 import * as anchor from "@coral-xyz/anchor";
-import { Program } from "@coral-xyz/anchor";
 import { BN, Program, web3 } from "@coral-xyz/anchor";
 import { Amm } from "../target/types/amm";
 import { randomBytes } from "crypto";
@@ -157,8 +156,6 @@ describe("amm", () => {
 
   it("Initialize", async () => {
     // Add your test here.
-    const tx = await program.methods.initialize().rpc();
-    console.log("Your transaction signature", tx);
     const tx = await program.methods
       .initialize(seed, 300, initializer.publicKey)
       .accounts({
