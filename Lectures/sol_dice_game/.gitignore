@@ -10,5 +10,3 @@ node_modules
 test-ledger
 .yarn
 cargo.lock
-yarn.lock
-Cargo.lock
