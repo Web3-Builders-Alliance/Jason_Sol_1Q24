@@ -15,7 +15,7 @@ declare_id!("aNRwZCzkCWyMtA25PKdqL4JVm3rpmw6CQJ7QjpPUWSL");
 pub mod cap_project {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        initialize::handler(ctx)
+    pub fn initialize(ctx: Context<Initialize>, name: String, fee: u16) -> Result<()> {
+        ctx.accounts.initialize(name, fee)
     }
 }

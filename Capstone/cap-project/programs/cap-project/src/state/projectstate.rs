@@ -24,7 +24,7 @@ pub struct ContractAccount {
 }
 
 impl Space for Marketplace {
-    const INIT_SPACE: usize = 8 + 32 + 2 + (4 + 32);
+    const INIT_SPACE: usize = 8 + 32 + 2 + (4 );
 }
 
 impl Space for UserAccount {
@@ -32,5 +32,5 @@ impl Space for UserAccount {
 }
 
 impl Space for ContractAccount {
-    const INIT_SPACE: usize = 8 + 32 + 32 + 3 + (4 + 32);
+    const INIT_SPACE: usize = 8 + 32 + 32 + 3 + (4 );
 }
