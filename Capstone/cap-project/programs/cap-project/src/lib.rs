@@ -18,4 +18,8 @@ pub mod cap_project {
     pub fn initialize(ctx: Context<Initialize>, name: String, fee: u16) -> Result<()> {
         ctx.accounts.initialize(name, fee)
     }
+
+    pub fn make_contract(ctx: Context<Make>, seed: u64, amount: u64,time_period: i64) -> Result<()> { 
+        ctx.accounts.make_contract(seed, amount, time_period)
+    }
 }
