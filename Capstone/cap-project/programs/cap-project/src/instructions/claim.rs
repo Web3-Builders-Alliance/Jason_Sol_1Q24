@@ -1,7 +1,8 @@
 use anchor_lang::prelude::*;
 use anchor_lang::system_program::{Transfer, transfer};
+pub use crate::error::ErrorMessages;
 
-use crate::ContractAccount;
+use crate::{ApplicationState, ContractAccount};
 
 #[derive(Accounts)]
 pub struct Claim<'info> {
@@ -27,7 +28,7 @@ pub struct Claim<'info> {
         bump = vault_state.state_bump
     )]
     pub vault_state: Account<'info, ContractAccount>,
-    
+    pub application: Account<'info, ApplicationState>,
     pub system_program: Program<'info, System>,
 }
 
@@ -58,8 +59,3 @@ impl<'info> Claim<'info> {
 
 
 
-#[error_code]
-pub enum ErrorMessages {
-    #[msg("Vault has not expired")]
-    VaultNotExpired,
-}

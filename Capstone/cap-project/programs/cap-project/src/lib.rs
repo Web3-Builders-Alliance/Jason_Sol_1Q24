@@ -1,11 +1,9 @@
-pub mod constants;
 pub mod error;
 pub mod instructions;
 pub mod state;
 
 use anchor_lang::prelude::*;
 
-pub use constants::*;
 pub use instructions::*;
 
 declare_id!("aNRwZCzkCWyMtA25PKdqL4JVm3rpmw6CQJ7QjpPUWSL");
@@ -21,6 +19,14 @@ pub mod cap_project {
 
     pub fn revoke_contract(ctx: Context<Revoke>)-> Result<()> { 
         ctx.accounts.revoke_contract()
+    }
+
+    pub fn application(ctx: Context<Applicate>) -> Result<()> {
+        ctx.accounts.create_application()
+    }
+
+    pub fn acceptapplication(ctx: Context<AcceptApplication>) -> Result<()> {
+        ctx.accounts.accept_application()
     }
 
     pub fn claim(ctx: Context<Claim>) -> Result<()> {
