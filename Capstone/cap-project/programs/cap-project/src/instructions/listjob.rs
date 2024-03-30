@@ -7,7 +7,6 @@ pub use crate::state::*;
 pub struct Make<'info> {
     #[account(mut)]
     pub employer: Signer<'info>,
-    //pub worker: SystemAccount<'info>,
     
     #[account(
         mut,
@@ -21,7 +20,7 @@ pub struct Make<'info> {
     
     #[account(init,
     payer = employer,
-    seeds = [b"vault_state", seed.to_le_bytes().as_ref(), employer.key().as_ref()],//, worker.key().as_ref()], 
+    seeds = [b"vault_state", seed.to_le_bytes().as_ref(), employer.key().as_ref()],
     bump, 
     space = ContractAccount::INIT_SPACE
     )]
@@ -34,7 +33,7 @@ impl<'info> Make<'info> {
     pub fn make_contract(&mut self,seed: u64,amount: u64,time_period: i64, ) -> Result<()> {
 
         self.vault_state.employer = self.employer.key();
-        self.vault_state.worker = None;//Some(self.worker.key());
+        self.vault_state.worker = None;
         self.vault_state.seed = seed;
         self.vault_state.state_bump;
         self.vault_state.vault_keeper = self.vault_keeper.key();
