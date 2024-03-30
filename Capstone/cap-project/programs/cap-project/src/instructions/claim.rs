@@ -15,16 +15,16 @@ pub struct Claim<'info> {
     #[account(
         mut,
         seeds = [b"vault",vault_state.key().as_ref(),],
-        bump = vault_state.vault_bump
+        bump = vault_state.vault_bump,
     )]
     pub vault_keeper: SystemAccount<'info>,
     
     #[account(mut, 
-        has_one = worker,
+        constraint = worker.key() == vault_state.worker.unwrap(),
         constraint = vault_keeper.key() == vault_state.vault_keeper,
         constraint = vault_state.created_at + vault_state.lock_seconds < Clock::get()?.unix_timestamp @ ErrorMessages::VaultNotExpired,
         close = employer,
-        seeds = [b"vault_state",vault_state.seed.to_le_bytes().as_ref(),vault_state.employer.as_ref(),vault_state.worker.as_ref()], 
+        seeds = [b"vault_state",vault_state.seed.to_le_bytes().as_ref(),vault_state.employer.as_ref(),vault_state.worker.unwrap().as_ref()], 
         bump = vault_state.state_bump
     )]
     pub vault_state: Account<'info, ContractAccount>,
@@ -56,6 +56,3 @@ impl<'info> Claim<'info> {
         transfer(cpi_context, self.vault_keeper.get_lamports())
     }
 }
-
-
-
