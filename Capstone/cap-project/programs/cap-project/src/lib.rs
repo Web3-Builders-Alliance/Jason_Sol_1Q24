@@ -13,7 +13,7 @@ pub mod cap_project {
     use super::*;
 
     pub fn make_contract(ctx: Context<Make>, seed: u64, amount: u64,time_period: i64) -> Result<()> { 
-        ctx.accounts.make_contract(seed, amount, time_period)?;
+        ctx.accounts.make_contract(seed, amount, time_period, ctx.bumps)?;
         ctx.accounts.transfer_amount(amount)
     }
 

@@ -38,3 +38,318 @@ it("Airdrop", async () => {
 });
 
 
+describe("List and revoke list offer", () => {
+  const seed = new anchor.BN(1);
+  const [vault_state] = PublicKey.findProgramAddressSync(
+    [
+      Buffer.from("vault_state"),
+      seed.toBuffer("le", 8),
+      employer.publicKey.toBuffer(),
+      //worker.publicKey.toBuffer(),
+    ],
+    program.programId
+  );
+
+  console.log(vault_state);
+
+  const [vault_keeper] = PublicKey.findProgramAddressSync(
+    [Buffer.from("vault"), vault_state.toBuffer()],
+    program.programId
+  );
+
+  it("Deposit SOL into Vault!", async () => {
+    const tx = await program.methods
+      .makeContract(seed, new anchor.BN(1 * LAMPORTS_PER_SOL), new anchor.BN(1))
+      .accounts({
+        employer: employer.publicKey,
+        vaultKeeper: vault_keeper,
+        vaultState: vault_state,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([employer])
+      .rpc();
+    expect(tx).to.be.ok;
+  });
+
+  it("Cancel the deposit", async () => {
+    
+    try {
+    const tx = await program.methods
+      .revokeContract()
+      .accounts({
+        employer: employer.publicKey,
+        vaultKeeper: vault_keeper,
+        vaultState: vault_state,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([employer])
+      .rpc();
+    expect(tx).to.be.ok;
+    } catch (e) {console.log(e)}
+
+  });
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+describe("Application initialized", () => {
+  const seed = new anchor.BN(1);
+  const [vault_state] = PublicKey.findProgramAddressSync(
+    [
+      Buffer.from("vault_state"),
+      seed.toBuffer("le", 8),
+      employer.publicKey.toBuffer(),
+      //worker.publicKey.toBuffer(),
+    ],
+    program.programId
+  );
+
+  const [vault_keeper] = PublicKey.findProgramAddressSync(
+    [Buffer.from("vault"), vault_state.toBuffer()],
+    program.programId
+  );
+
+  const [application_state] = PublicKey.findProgramAddressSync(
+    [
+      Buffer.from("application"),
+      worker.publicKey.toBuffer(),
+      vault_state.toBuffer(),
+    ],
+    program.programId
+  );
+
+  it("Deposit SOL into Vault!", async () => {
+    const tx = await program.methods
+      .makeContract(seed, new anchor.BN(1 * LAMPORTS_PER_SOL), new anchor.BN(1))
+      .accounts({
+        employer: employer.publicKey,
+        vaultKeeper: vault_keeper,
+        vaultState: vault_state,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([employer])
+      .rpc();
+    expect(tx).to.be.ok;
+  });
+  
+  it("Application", async () => {
+    const tx = await program.methods
+    .application()
+    .accounts({
+      worker: worker.publicKey,
+      application: application_state,
+      joblisting: vault_state,
+      systemProgram: SystemProgram.programId,
+    })
+    .signers([worker])
+    .rpc();
+  expect(tx).to.be.ok;
+  });
+});
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// describe("Create and accept application", () => {
+//   const seed = new anchor.BN(2);
+//   const [vault_state] = PublicKey.findProgramAddressSync(
+//     [
+//       Buffer.from("vault_state"),
+//       seed.toBuffer("le", 8),
+//       employer.publicKey.toBuffer(),
+//       worker.publicKey.toBuffer(),
+//     ],
+//     program.programId
+//   );
+
+//   const [vault_keeper] = PublicKey.findProgramAddressSync(
+//     [Buffer.from("vault"), vault_state.toBuffer()],
+//     program.programId
+//   );
+
+//   it("Deposit SOL into Vault!", async () => {
+//     const tx = await program.methods
+//       .makeContract(seed, new anchor.BN(1 * LAMPORTS_PER_SOL), new anchor.BN(-1))
+//       .accounts({
+//         employer: employer.publicKey,
+//         vaultKeeper: vault_keeper,
+//         vaultState: vault_state,
+//         systemProgram: SystemProgram.programId,
+//       })
+//       .signers([employer])
+//       .rpc();
+//     expect(tx).to.be.ok;
+//   });
+
+//   it("Create application", async() => {
+
+//   });
+
+//   it("Accept Application", async () => {
+
+//   });
+
+  
+//   it("Claim the deposit", async () => {
+//     const tx = await program.methods
+//       .claim()
+//       .accounts({
+//         worker: worker.publicKey,
+//         employer: employer.publicKey,
+//         vaultKeeper: vault_keeper,
+//         vaultState: vault_state,
+//         systemProgram: SystemProgram.programId,
+//         //??application: anchor.Address;
+//       })
+//       .signers([worker])
+//       .rpc();
+//     expect(tx).to.be.ok;
+//   });
+// });
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// describe("Create and Cancel successfully", () => {
+//   const seed = new anchor.BN(1);
+//   const [vault_state] = PublicKey.findProgramAddressSync(
+//     [
+//       Buffer.from("vault_state"),
+//       seed.toBuffer("le", 8),
+//       employer.publicKey.toBuffer(),
+//       worker.publicKey.toBuffer(),
+//     ],
+//     program.programId
+//   );
+
+//   const [vault_keeper] = PublicKey.findProgramAddressSync(
+//     [Buffer.from("vault"), vault_state.toBuffer()],
+//     program.programId
+//   );
+
+//   it("Deposit SOL into Vault!", async () => {
+//     const tx = await program.methods
+//       .deposit(seed, new anchor.BN(1 * LAMPORTS_PER_SOL), new anchor.BN(1))
+//       .accounts({
+//         employer: employer.publicKey,
+//         worker: worker.publicKey,
+//         vaultKeeper: vault_keeper,
+//         vaultState: vault_state,
+//         systemProgram: SystemProgram.programId,
+//       })
+//       .signers([employer])
+//       .rpc();
+//     expect(tx).to.be.ok;
+//   });
+
+//   it("Cancel the deposit", async () => {
+//     const tx = await program.methods
+//       .cancel()
+//       .accounts({
+//         employer: employer.publicKey,
+//         vaultKeeper: vault_keeper,
+//         vaultState: vault_state,
+//         systemProgram: SystemProgram.programId,
+//       })
+//       .signers([employer])
+//       .rpc();
+//     expect(tx).to.be.ok;
+//   });
+// });
+
+// describe("Create and Claim successfully", () => {
+//   const seed = new anchor.BN(2);
+//   const [vault_state] = PublicKey.findProgramAddressSync(
+//     [
+//       Buffer.from("vault_state"),
+//       seed.toBuffer("le", 8),
+//       employer.publicKey.toBuffer(),
+//       worker.publicKey.toBuffer(),
+//     ],
+//     program.programId
+//   );
+
+//   const [vault_keeper] = PublicKey.findProgramAddressSync(
+//     [Buffer.from("vault"), vault_state.toBuffer()],
+//     program.programId
+//   );
+
+//   it("Deposit SOL into Vault!", async () => {
+//     const tx = await program.methods
+//       .deposit(seed, new anchor.BN(1 * LAMPORTS_PER_SOL), new anchor.BN(-1))
+//       .accounts({
+//         employer: employer.publicKey,
+//         worker: worker.publicKey,
+//         vaultKeeper: vault_keeper,
+//         vaultState: vault_state,
+//         systemProgram: SystemProgram.programId,
+//       })
+//       .signers([employer])
+//       .rpc();
+//     expect(tx).to.be.ok;
+//   });
+
+//   it("Claim the deposit", async () => {
+//     const tx = await program.methods
+//       .claim()
+//       .accounts({
+//         worker: worker.publicKey,
+//         employer: employer.publicKey,
+//         vaultKeeper: vault_keeper,
+//         vaultState: vault_state,
+//         systemProgram: SystemProgram.programId,
+//       })
+//       .signers([worker])
+//       .rpc();
+//     expect(tx).to.be.ok;
+//   });
+// });
+
+// describe("Create and Claim fail because lock_time is not expired", () => {
+//   const seed = new anchor.BN(3);
+//   const [vault_state] = PublicKey.findProgramAddressSync(
+//     [
+//       Buffer.from("vault_state"),
+//       seed.toBuffer("le", 8),
+//       employer.publicKey.toBuffer(),
+//       worker.publicKey.toBuffer(),
+//     ],
+//     program.programId
+//   );
+
+//   const [vault_keeper] = PublicKey.findProgramAddressSync(
+//     [Buffer.from("vault"), vault_state.toBuffer()],
+//     program.programId
+//   );
+
+//   it("Deposit SOL into Vault!", async () => {
+//     const tx = await program.methods
+//       .deposit(seed, new anchor.BN(1 * LAMPORTS_PER_SOL), new anchor.BN(5))
+//       .accounts({
+//         employer: employer.publicKey,
+//         worker: worker.publicKey,
+//         vaultKeeper: vault_keeper,
+//         vaultState: vault_state,
+//         systemProgram: SystemProgram.programId,
+//       })
+//       .signers([employer])
+//       .rpc();
+//     expect(tx).to.be.ok;
+//   });
+
+//   it("Claim the deposit", async () => {
+//     try {
+//       const tx = await program.methods
+//         .claim()
+//         .accounts({
+//           worker: worker.publicKey,
+//           employer: employer.publicKey,
+//           vaultKeeper: vault_keeper,
+//           vaultState: vault_state,
+//           systemProgram: SystemProgram.programId,
+//         })
+//         .signers([worker])
+//         .rpc();
+//     } catch (error) {
+//       assert.isTrue(error instanceof AnchorError);
+//       assert.equal(error.error.errorCode.number, 6000);
+//       assert.equal(error.error.errorMessage, "Vault has not expired");
+//     }
+//   });
+// });
