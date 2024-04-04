@@ -7,10 +7,10 @@ use crate::{ApplicationState, ContractAccount};
 #[derive(Accounts)]
 pub struct Claim<'info> {
     #[account(mut)]
-    pub employer: Signer<'info>,
+    pub worker: Signer<'info>,
     
     #[account(mut)]
-    pub worker: SystemAccount<'info>,
+    pub employer: SystemAccount<'info>,
     
     #[account(
         mut,
